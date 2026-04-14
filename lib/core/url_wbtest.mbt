@@ -89,3 +89,10 @@ test "Parse MUST fail when unsupported scheme is specified" {
   let expected = Err("Only HTTP scheme is supported.")
   assert_eq(expected, Url::new(url).parse())
 }
+
+///|
+test "Parse MUST fail when http:// appears in the middle of the URL" {
+  let url = "abchttp://example.com"
+  let expected = Err("Only HTTP scheme is supported.")
+  assert_eq(expected, Url::new(url).parse())
+}
