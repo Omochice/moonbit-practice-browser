@@ -52,3 +52,12 @@ fn Url::extract_path(self : Url) -> String {
     None => ""
   }
 }
+
+///|
+fn Url::extract_searchpart(self : Url) -> String {
+  match
+    self.url.trim_start(chars="http://").after("/").unwrap_or("").after("?") {
+    Some(s) => s.to_string()
+    None => ""
+  }
+}
