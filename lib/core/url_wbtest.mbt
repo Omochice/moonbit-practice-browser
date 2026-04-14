@@ -12,6 +12,19 @@ test "Url MUST has port 80 defaultly" {
 }
 
 ///|
+test "Url MUST has host.com when host.example.com" {
+  let url = "http://host.example.com"
+  let expected = Ok(Url::{
+    url,
+    host: "host.example.com",
+    port: "80",
+    path: "",
+    searchpart: "",
+  })
+  assert_eq(expected, Url::new(url).parse())
+}
+
+///|
 test "Url MUST has port 8888 when input http://example.com:8888" {
   let url = "http://example.com:8888"
   let expected = Ok(Url::{
