@@ -15,7 +15,7 @@ pub fn Url::new(url : String) -> Url {
 ///|
 pub fn Url::parse(self : Url) -> Result[Url, String] {
   if !self.is_http() {
-    return Err("Only HTTP scheme is supported")
+    return Err("Only HTTP scheme is supported.")
   }
   Ok(Url::{
     ..self,
