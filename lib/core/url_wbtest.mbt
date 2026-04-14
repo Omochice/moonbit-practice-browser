@@ -96,3 +96,16 @@ test "Parse MUST fail when http:// appears in the middle of the URL" {
   let expected = Err("Only HTTP scheme is supported.")
   assert_eq(expected, Url::new(url).parse())
 }
+
+///|
+test "Url MUST has searchpart when path is missing" {
+  let url = "http://example.com?a=1"
+  let expected = Ok(Url::{
+    url,
+    host: "example.com",
+    port: "80",
+    path: "",
+    searchpart: "a=1",
+  })
+  assert_eq(expected, Url::new(url).parse())
+}
