@@ -35,3 +35,12 @@ fn Url::extract_host(self : Url) -> String {
     None => url_parts[0].to_string()
   }
 }
+
+///|
+fn Url::extract_port(self : Url) -> String {
+  let url_parts = self.url.trim_start(chars="http://").split("/").collect()
+  match url_parts[0].find(":") {
+    Some(i) => url_parts[0].sub(start=i + 1).to_string()
+    None => "80"
+  }
+}
