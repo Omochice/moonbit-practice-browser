@@ -44,3 +44,11 @@ fn Url::extract_port(self : Url) -> String {
     None => "80"
   }
 }
+
+///|
+fn Url::extract_path(self : Url) -> String {
+  match self.url.trim_start(chars="http://").after("/") {
+    Some(s) => s.before("?").unwrap_or("").to_string()
+    None => ""
+  }
+}
