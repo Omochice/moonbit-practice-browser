@@ -17,6 +17,13 @@ pub fn Url::parse(self : Url) -> Result[Url, String] {
   if !self.is_http() {
     return Err("Only HTTP scheme is supported")
   }
+  Ok(Url::{
+    ..self,
+    host: self.extract_host(),
+    port: self.extract_port(),
+    path: self.extract_path(),
+    searchpart: self.extract_searchpart(),
+  })
 }
 
 ///|
