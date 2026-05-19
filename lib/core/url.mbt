@@ -62,8 +62,9 @@ fn Url::extract_path(self : Url) -> String {
 
 ///|
 fn Url::extract_searchpart(self : Url) -> String {
-  match self.url.sub(start=7).after("/").unwrap_or("").after("?") {
-    Some(s) => s.to_string()
-    None => ""
+  let trimmed = self.url.sub(start=7)
+  match trimmed.after("/") {
+    Some(s) => s.after("?").unwrap_or("").to_string()
+    None => trimmed.after("?").unwrap_or("").to_string()
   }
 }
