@@ -28,7 +28,7 @@ pub fn Url::parse(self : Url) -> Result[Url, String] {
 
 ///|
 fn Url::is_http(self : Url) -> Bool {
-  if self.url.contains("http://") {
+  if self.url.has_prefix("http://") {
     return true
   }
   false
