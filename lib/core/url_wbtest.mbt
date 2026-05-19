@@ -148,3 +148,16 @@ test "Url MUST has searchpart when path is empty after slash" {
   })
   assert_eq(expected, Url::new(url).parse())
 }
+
+///|
+test "Url MUST parse complex string" {
+  let url = "http://example.com:8888/index.html?a=123&b=456"
+  let expected = Ok(Url::{
+    url,
+    host: "example.com",
+    port: "8888",
+    path: "index.html",
+    searchpart: "a=123&b=456",
+  })
+  assert_eq(expected, Url::new(url).parse())
+}
