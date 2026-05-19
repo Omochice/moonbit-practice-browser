@@ -109,3 +109,42 @@ test "Url MUST has searchpart when path is missing" {
   })
   assert_eq(expected, Url::new(url).parse())
 }
+
+///|
+test "Url MUST has port and searchpart when path is missing" {
+  let url = "http://example.com:8888?a=1"
+  let expected = Ok(Url::{
+    url,
+    host: "example.com",
+    port: "8888",
+    path: "",
+    searchpart: "a=1",
+  })
+  assert_eq(expected, Url::new(url).parse())
+}
+
+///|
+test "Url MUST has empty path when input ends with trailing slash" {
+  let url = "http://example.com/"
+  let expected = Ok(Url::{
+    url,
+    host: "example.com",
+    port: "80",
+    path: "",
+    searchpart: "",
+  })
+  assert_eq(expected, Url::new(url).parse())
+}
+
+///|
+test "Url MUST has searchpart when path is empty after slash" {
+  let url = "http://example.com/?a=1"
+  let expected = Ok(Url::{
+    url,
+    host: "example.com",
+    port: "80",
+    path: "",
+    searchpart: "a=1",
+  })
+  assert_eq(expected, Url::new(url).parse())
+}
