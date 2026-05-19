@@ -49,9 +49,13 @@ fn Url::extract_host(self : Url) -> String {
 
 ///|
 fn Url::extract_port(self : Url) -> String {
-  let url_parts = self.url.sub(start=7).split("/").collect()
-  match url_parts[0].find(":") {
-    Some(i) => url_parts[0].sub(start=i + 1).to_string()
+  let trimmed = self.url.sub(start=7)
+  let may_contain_query = trimmed.before("/").unwrap_or(trimmed)
+  let may_contain_port = may_contain_query
+    .before("?")
+    .unwrap_or(may_contain_query)
+  match may_contain_port.after(":") {
+    Some(s) => s.to_string()
     None => "80"
   }
 }
