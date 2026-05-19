@@ -1,0 +1,78 @@
+///|
+pub struct Url {
+  url : String
+  host : String
+  port : String
+  path : String
+  searchpart : String
+} derive(Show, Eq)
+
+///|
+pub fn Url::new(url : String) -> Url {
+  { url, host: "", port: "", path: "", searchpart: "" }
+}
+
+///|
+pub fn Url::parse(self : Url) -> Result[Url, String] {
+  if !self.is_http() {
+    return Err("Only HTTP scheme is supported.")
+  }
+  Ok(Url::{
+    ..self,
+    host: self.extract_host(),
+    port: self.extract_port(),
+    path: self.extract_path(),
+    searchpart: self.extract_searchpart(),
+  })
+}
+
+///|
+fn Url::is_http(self : Url) -> Bool {
+  if self.url.has_prefix("http://") {
+    return true
+  }
+  false
+}
+
+///|
+fn Url::extract_host(self : Url) -> String {
+  let trimmed = self.url.sub(start=7)
+  let may_contain_query = trimmed.before("/").unwrap_or(trimmed)
+  let may_contain_port = may_contain_query
+    .before("?")
+    .unwrap_or(may_contain_query)
+  match may_contain_port.before(":") {
+    Some(s) => s.to_string()
+    None => may_contain_port.to_string()
+  }
+}
+
+///|
+fn Url::extract_port(self : Url) -> String {
+  let trimmed = self.url.sub(start=7)
+  let may_contain_query = trimmed.before("/").unwrap_or(trimmed)
+  let may_contain_port = may_contain_query
+    .before("?")
+    .unwrap_or(may_contain_query)
+  match may_contain_port.after(":") {
+    Some(s) => s.to_string()
+    None => "80"
+  }
+}
+
+///|
+fn Url::extract_path(self : Url) -> String {
+  match self.url.sub(start=7).after("/") {
+    Some(s) => s.before("?").unwrap_or(s).to_string()
+    None => ""
+  }
+}
+
+///|
+fn Url::extract_searchpart(self : Url) -> String {
+  let trimmed = self.url.sub(start=7)
+  match trimmed.after("/") {
+    Some(s) => s.after("?").unwrap_or("").to_string()
+    None => trimmed.after("?").unwrap_or("").to_string()
+  }
+}
