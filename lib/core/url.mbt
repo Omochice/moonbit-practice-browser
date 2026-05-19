@@ -36,10 +36,14 @@ fn Url::is_http(self : Url) -> Bool {
 
 ///|
 fn Url::extract_host(self : Url) -> String {
-  let url_parts = self.url.sub(start=7).split("/").collect()
-  match url_parts[0].find(":") {
-    Some(i) => url_parts[0].sub(start=0, end=i).to_string()
-    None => url_parts[0].to_string()
+  let trimmed = self.url.sub(start=7)
+  let may_contain_query = trimmed.before("/").unwrap_or(trimmed)
+  let may_contain_port = may_contain_query
+    .before("?")
+    .unwrap_or(may_contain_query)
+  match may_contain_port.before(":") {
+    Some(s) => s.to_string()
+    None => may_contain_port.to_string()
   }
 }
 
